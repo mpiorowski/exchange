@@ -1,10 +1,19 @@
 import {Form, Modal, Select} from 'antd';
-import React from "react";
+import React, {useState} from "react";
 
 const {Option} = Select;
 
-export const ExchangeModal = ({visible, onCreate, onCancel}) => {
+export const ExchangeModal = ({visible, onSubmit, onCancel, exchangeCodes}) => {
   const [form] = Form.useForm();
+
+  console.log(exchangeCodes);
+
+  React.useEffect(() => {
+    console.log('tutaj', exchangeCodes);
+    form.setFieldsValue({
+      code: exchangeCodes,
+    });
+  }, [exchangeCodes]);
 
   const children = [
     <Option key="THB">bat (Tajlandia)</Option>,
@@ -12,9 +21,12 @@ export const ExchangeModal = ({visible, onCreate, onCancel}) => {
     <Option key="AUD">dolar australijski</Option>,
   ];
 
-  function handleChange(value) {
-    console.log(`selected ${value}`);
-  }
+  // function handleChange(value) {
+  //   console.log(`selected ${value}`);
+  //   form.setFieldsValue({
+  //     code: value.codes,
+  //   });
+  // }
 
   return (
     <Modal
@@ -28,7 +40,7 @@ export const ExchangeModal = ({visible, onCreate, onCancel}) => {
           .validateFields()
           .then(values => {
             form.resetFields();
-            onCreate(values);
+            onSubmit(values);
           })
           .catch(info => {
             console.log('Validate Failed:', info);
@@ -39,9 +51,9 @@ export const ExchangeModal = ({visible, onCreate, onCancel}) => {
         form={form}
         layout="vertical"
         name="form_in_modal"
-        initialValues={{
-          modifier: 'public',
-        }}
+        // initialValues={{
+        //   code: ss,
+        // }}
       >
         <Form.Item
           name="code"
@@ -56,7 +68,8 @@ export const ExchangeModal = ({visible, onCreate, onCancel}) => {
             mode="multiple"
             style={{width: '100%'}}
             placeholder="Lista walut"
-            onChange={handleChange}
+            // onChange={handleChange}
+            // value={exchangeCodes}
           >
             {children}
           </Select>

@@ -10,30 +10,38 @@ export const ExchangeList = () => {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [exchangeRates, setExchangeRates] = useState([]);
-  const storedExchangeCodes = JSON.parse(localStorage.getItem("exchangeRates"));
+  const [exchangeCodes, setExchangeCodes] = useState(JSON.parse(localStorage.getItem('exchangeRates')) || []);
 
   useEffect(() => {
-    let exchangeRatesArray = [];
-    let promiseArray = [];
-    storedExchangeCodes.forEach(exchangeCode => {
-      promiseArray.push(serviceGetExchangeByCode(exchangeCode).then(response => {
-        exchangeRatesArray.push({code: response.code, mid: response.rates[0].mid});
-      }));
-    });
-    Promise.all(promiseArray).then(() => {
-      setLoading(false);
-      setExchangeRates([...exchangeRates, ...exchangeRatesArray]);
-    });
+    loadExchangeByCodes(exchangeCodes);
   }, [])
 
   const openModal = () => {
     setModalVisible(true);
   }
 
-  const onCreate = values => {
-    console.log('Received values of form: ', values);
-    setModalVisible(false);
+  const onSubmit = values => {
+    console.log(values);
+    localStorage.setItem('exchangeRates', JSON.stringify(values.code));
+
+    loadExchangeByCodes(values.code);
   };
+
+  const loadExchangeByCodes = (codes) => {
+    let exchangeRatesArray = [];
+    let promiseArray = [];
+    codes.forEach(exchangeCode => {
+      promiseArray.push(serviceGetExchangeByCode(exchangeCode).then(response => {
+        exchangeRatesArray.push({code: response.code, mid: response.rates[0].mid});
+      }));
+    });
+    Promise.all(promiseArray).then(() => {
+      setLoading(false);
+      setModalVisible(false);
+      setExchangeCodes([...codes]);
+      setExchangeRates([...exchangeRatesArray]);
+    });
+  }
 
   return (
     <div className={'exchange-div'}>
@@ -59,10 +67,11 @@ export const ExchangeList = () => {
       />
       <ExchangeModal
         visible={modalVisible}
-        onCreate={onCreate}
+        onSubmit={onSubmit}
         onCancel={() => {
           setModalVisible(false);
         }}
+        exchangeCodes={exchangeCodes}
       />
     </div>
   )
