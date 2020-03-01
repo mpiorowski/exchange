@@ -57,7 +57,13 @@ export const ExchangeList = () => {
           </List.Item>
         )}
       />
-
+      <ExchangeModal
+        visible={modalVisible}
+        onCreate={onCreate}
+        onCancel={() => {
+          setModalVisible(false);
+        }}
+      />
     </div>
   )
 }
