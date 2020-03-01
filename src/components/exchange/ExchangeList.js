@@ -10,14 +10,17 @@ export const ExchangeList = () => {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [exchangeRates, setExchangeRates] = useState([]);
-  const [exchangeCodes, setExchangeCodes] = useState(JSON.parse(localStorage.getItem('exchangeRates')) || []);
+  const [exchangeCodes] = useState(JSON.parse(localStorage.getItem('exchangeRates')) || []);
 
   const [currencies, setCurrencies] = useState([]);
 
-  useEffect(() => {
+  useEffect(()=> {
     loadAllCodes();
-    loadExchangeByCodes(exchangeCodes);
   }, [])
+
+  useEffect(() => {
+    loadExchangeByCodes(exchangeCodes);
+  }, [exchangeCodes])
 
   const loadAllCodes = () => {
     serviceGetAllCurrencies().then(response => {
@@ -40,8 +43,7 @@ export const ExchangeList = () => {
     Promise.all(promiseArray).then(() => {
       setLoading(false);
       setModalVisible(false);
-      setExchangeCodes([...codes]);
-      exchangeRatesArray.sort(function (a,b) {
+      exchangeRatesArray.sort(function (a, b) {
         if (a.code < b.code) {
           return -1;
         }

@@ -6,12 +6,6 @@ const {Option} = Select;
 export const ExchangeModal = ({visible, onSubmit, onCancel, exchangeCodes, currencies}) => {
   const [form] = Form.useForm();
 
-  React.useEffect(() => {
-    form.setFieldsValue({
-      code: exchangeCodes,
-    });
-  }, []);
-
   const clearAll = () => {
     form.setFieldsValue({
       code: [],
@@ -78,6 +72,7 @@ export const ExchangeModal = ({visible, onSubmit, onCancel, exchangeCodes, curre
             mode="multiple"
             style={{width: '100%'}}
             placeholder="Currencies list"
+            defaultValue={exchangeCodes}
             // onChange={handleChange}
           >
             {children}
