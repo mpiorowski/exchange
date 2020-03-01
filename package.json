@@ -13,10 +13,12 @@
     "craco-less": "^1.16.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "serve": "^11.3.0"
   },
   "scripts": {
-    "start": "craco start",
+    "run": "craco start",
+    "start": "serve -s build",
     "build": "craco build",
     "test": "craco test",
     "eject": "craco eject"
