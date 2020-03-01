@@ -1,1 +1,1 @@
-localStorage.setItem('exchangeRates', []);
+

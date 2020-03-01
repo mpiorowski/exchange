@@ -1,6 +1,6 @@
 import {Button, Card, List} from 'antd';
 import React, {useEffect, useState} from "react";
-import {serviceGetExchangeByCode} from "../../rest/ExchangeRequest";
+import {serviceGetAllCurrencies, serviceGetExchangeByCode} from "../../rest/ExchangeRequest";
 import './ExchangeList.less';
 import {PlusOutlined} from '@ant-design/icons';
 import {ExchangeModal} from "./ExchangeModal";
@@ -12,20 +12,22 @@ export const ExchangeList = () => {
   const [exchangeRates, setExchangeRates] = useState([]);
   const [exchangeCodes, setExchangeCodes] = useState(JSON.parse(localStorage.getItem('exchangeRates')) || []);
 
+  const [currencies, setCurrencies] = useState([]);
+
   useEffect(() => {
+    loadAllCodes();
     loadExchangeByCodes(exchangeCodes);
   }, [])
 
-  const openModal = () => {
-    setModalVisible(true);
+  const loadAllCodes = () => {
+    serviceGetAllCurrencies().then(response => {
+      let currenciesArray = [];
+      response[0].rates.forEach((currency) => {
+        currenciesArray.push({code: currency.code, name: currency.currency})
+      })
+      setCurrencies([...currenciesArray]);
+    })
   }
-
-  const onSubmit = values => {
-    console.log(values);
-    localStorage.setItem('exchangeRates', JSON.stringify(values.code));
-
-    loadExchangeByCodes(values.code);
-  };
 
   const loadExchangeByCodes = (codes) => {
     let exchangeRatesArray = [];
@@ -43,6 +45,15 @@ export const ExchangeList = () => {
     });
   }
 
+  const openModal = () => {
+    setModalVisible(true);
+  }
+
+  const onSubmit = values => {
+    localStorage.setItem('exchangeRates', JSON.stringify(values.code));
+    loadExchangeByCodes(values.code);
+  };
+
   return (
     <div className={'exchange-div'}>
       <Button
@@ -52,7 +63,7 @@ export const ExchangeList = () => {
         }}
         style={{width: '60%'}}
       >
-        <PlusOutlined/> Dodaj walutę
+        <PlusOutlined/> Add/Delete currencies
       </Button>
       <List
         loading={loading}
@@ -72,6 +83,7 @@ export const ExchangeList = () => {
           setModalVisible(false);
         }}
         exchangeCodes={exchangeCodes}
+        currencies={currencies}
       />
     </div>
   )

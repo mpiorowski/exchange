@@ -3,43 +3,36 @@ import React, {useState} from "react";
 
 const {Option} = Select;
 
-export const ExchangeModal = ({visible, onSubmit, onCancel, exchangeCodes}) => {
+export const ExchangeModal = ({visible, onSubmit, onCancel, exchangeCodes, currencies}) => {
   const [form] = Form.useForm();
 
   console.log(exchangeCodes);
+  console.log(currencies);
 
   React.useEffect(() => {
-    console.log('tutaj', exchangeCodes);
     form.setFieldsValue({
       code: exchangeCodes,
     });
-  }, [exchangeCodes]);
+  }, []);
 
   const children = [
-    <Option key="THB">bat (Tajlandia)</Option>,
-    <Option key="USD">dolar amerykański</Option>,
-    <Option key="AUD">dolar australijski</Option>,
+    currencies.map((currency => {
+      return <Option key={currency.code}>{currency.name}</Option>
+    }))
   ];
-
-  // function handleChange(value) {
-  //   console.log(`selected ${value}`);
-  //   form.setFieldsValue({
-  //     code: value.codes,
-  //   });
-  // }
 
   return (
     <Modal
       visible={visible}
-      title="Wybierz waluty z listy poniżej"
-      okText="Create"
+      title="Choose currencies from the list below"
+      okText="Confirm"
       cancelText="Cancel"
       onCancel={onCancel}
       onOk={() => {
         form
           .validateFields()
           .then(values => {
-            form.resetFields();
+            // form.resetFields();
             onSubmit(values);
           })
           .catch(info => {
@@ -51,9 +44,6 @@ export const ExchangeModal = ({visible, onSubmit, onCancel, exchangeCodes}) => {
         form={form}
         layout="vertical"
         name="form_in_modal"
-        // initialValues={{
-        //   code: ss,
-        // }}
       >
         <Form.Item
           name="code"
@@ -69,7 +59,6 @@ export const ExchangeModal = ({visible, onSubmit, onCancel, exchangeCodes}) => {
             style={{width: '100%'}}
             placeholder="Lista walut"
             // onChange={handleChange}
-            // value={exchangeCodes}
           >
             {children}
           </Select>

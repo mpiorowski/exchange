@@ -1,6 +1,6 @@
 import {apiRequest} from "./ApiRequest";
 
-export function serviceGetExchange() {
+export function serviceGetAllCurrencies() {
   return apiRequest({
     url: 'api/exchangerates/tables/A/',
     method: 'GET'
