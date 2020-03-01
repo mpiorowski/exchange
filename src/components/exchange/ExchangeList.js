@@ -41,6 +41,15 @@ export const ExchangeList = () => {
       setLoading(false);
       setModalVisible(false);
       setExchangeCodes([...codes]);
+      exchangeRatesArray.sort(function (a,b) {
+        if (a.code < b.code) {
+          return -1;
+        }
+        if (a.code > b.code) {
+          return 1;
+        }
+        return 0;
+      });
       setExchangeRates([...exchangeRatesArray]);
     });
   }
