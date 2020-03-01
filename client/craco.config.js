@@ -8,26 +8,26 @@ const cspHtmlWebpackPlugin = require("csp-html-webpack-plugin");
 process.env.BROWSER = "none";
 
 const cspConfigPolicy = {
-    'default-src': "'self'",
-    'base-uri': "'self'",
-    'object-src': "'self'",
-    'form-action': "'self'",
-    'img-src': ["'self'", "data:"],
-    'script-src': ["'self'", "'unsafe-eval'"],
-    'style-src': ["'unsafe-inline'", "'self'", "'unsafe-eval'"]
+    // 'default-src': "'self'",
+    // 'base-uri': "'self'",
+    // 'object-src': "'self'",
+    // 'form-action': "'self'",
+    // 'img-src': ["'self'", "data:"],
+    // 'script-src': ["'self'", "'unsafe-eval'"],
+    // 'style-src': ["'unsafe-inline'", "'self'", "'unsafe-eval'"]
 };
 
 const cspConfigHash = {
-    enabled: true,
-    hashingMethod: 'sha256',
-    hashEnabled: {
-        'script-src': true,
-        'style-src': true
-    },
-    nonceEnabled: {
-        'script-src': true,
-        'style-src': false
-    }
+    // enabled: true,
+    // hashingMethod: 'sha256',
+    // hashEnabled: {
+    //     'script-src': true,
+    //     'style-src': true
+    // },
+    // nonceEnabled: {
+    //     'script-src': true,
+    //     'style-src': false
+    // }
 };
 
 
@@ -38,7 +38,9 @@ module.exports = {
             new WebpackBar({ profile: true }),
             ...(process.env.NODE_ENV === "development"
                 ? [new BundleAnalyzerPlugin({ openAnalyzer: false })]
-                : [new cspHtmlWebpackPlugin(cspConfigPolicy, cspConfigHash)])
+                : []
+                // : [new cspHtmlWebpackPlugin(cspConfigPolicy, cspConfigHash)]
+            )
         ]
     },
 
