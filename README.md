@@ -20,3 +20,6 @@ npm run-script build
 Production build also require setting up a proxy:
 
 /api -> http://api.nbp.pl/
+
+Working heroku example:
+https://exchange-24nett.herokuapp.com/
