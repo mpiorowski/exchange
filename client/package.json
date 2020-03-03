@@ -17,8 +17,7 @@
     "serve": "^11.3.0"
   },
   "scripts": {
-    "run": "craco start",
-    "start": "serve -s build",
+    "start": "craco start",
     "build": "craco build NODE_ENV=production",
     "test": "craco test",
     "eject": "craco eject"
