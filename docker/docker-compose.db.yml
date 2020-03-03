@@ -1,0 +1,17 @@
+version: '3.4'
+services:
+  database:
+    container_name: exchange-dbDockerfile
+      postgresql.conf
+    build: ../database
+    command: postgres -c shared_preload_libraries=pgaudit -c config_file=/etc/postgresql.conf
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: zaqwsx
+      POSTGRES_DB: app
+      PGDATA: /var/lib/postgresql/pgdata
+    volumes:
+      - ../database/pgdata:/var/lib/postgresql/pgdata
+      - ../database/postgresql.conf:/etc/postgresql.conf
+    ports:
+      - "5444:5432"
