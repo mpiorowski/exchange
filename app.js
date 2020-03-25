@@ -1,16 +1,16 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var proxy = require('express-http-proxy');
-var request = require('request');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const proxy = require('express-http-proxy');
+const request = require('request');
 
-var testAPIRouter = require("./routes/testApi");
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const testAPIRouter = require("./routes/testApi");
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,16 +24,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
+app.use("/testAPI", testAPIRouter);
 app.use('/api', function(req, res) {
-  var url = 'http://api.nbp.pl/api/' + req.url;
+  const url = 'http://api.nbp.pl/api/' + req.url;
   req.pipe(request(url)).pipe(res);
 });
 
-app.use("/testAPI", testAPIRouter);
-
 app.use(express.static(__dirname+'/client/build'));
-app.get('*', (req, res) => {
+
+app.use('*', function(req, res) {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
